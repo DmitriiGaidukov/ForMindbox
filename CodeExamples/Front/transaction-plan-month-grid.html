@@ -1,0 +1,117 @@
+﻿<div class="panel panel-default" ng-controller="TransactionPlanMoneyController">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h4>Планы клиентских оборотов (Денежные обороты)</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+ 
+              
+                <!-- Навигационная панель -->
+                <nav class="navbar navbar-default">
+                    <form class="navbar-form navbar-left">
+                        <button type="button" class="btn btn-success btn-default" ng-click="showAddDialog()">
+                            <span class="glyphicon glyphicon-plus"></span> Добавить
+                        </button>
+
+                        <div class="form-group">
+                            <label for="periodFilter">Период: </label>
+                            <select kendo-drop-down-list="periodCB"
+                                    k-options="periodOptions"
+                                    k-ng-model="period"
+                                    k-data-text-field="'Name'"
+                                    k-data-value-field="'FirstDay'"
+                                    style="width:200px;"  
+                                    class="form-control" 
+                                    id="periodFilter" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="statusFilter">Статусы задач: </label>
+                            <select kendo-multi-select k-options="statusListFilterOptions"
+                                    k-ng-model="statusListIds"
+                                    style="width:300px;" 
+                                    class="form-control" 
+                                    id="statusFilter" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="clientFilter">Клиенты: </label>
+                            <select kendo-multi-select k-options="clientListFilterOptions"
+                                    k-ng-model="clientListIds"
+                                    style="width:250px;"
+                                    class="form-control"
+                                    id="clientFilter" />
+                        </div>
+                        
+                        <div class="form-group" ng-show="readAll">
+                            <label for="vipManagerFilter">ВИП Менеджеры: </label>
+                            <select kendo-multi-select k-options="vipManagerListFilterOptions"
+                                    k-ng-model="vipManagerListIds"
+                                    style="width:250px;"
+                                    class="form-control"
+                                    id="vipManagerFilter"/>
+                        </div>
+
+                        <button class="btn btn-success btn-default" ng-click="search()" type="submit">
+                            <span class='glyphicon glyphicon-search'></span> Найти
+                        </button>
+                        <button class="btn btn-info btn-default" ng-click="downloadExcel()" type="submit">
+                            <span class='glyphicon glyphicon-list-alt'></span> В Excel
+                        </button>
+                    </form>
+                </nav>
+                <!-- Основная таблица -->
+                <div class="row">
+                    <div class="col-xc-8">
+                        <table kendo-grid options="mainGridOptions">
+                           
+                        </table>
+                        <script type="text/x-kendo-angular-template" id="row-template">
+                            <tr class="k-alt ng-scope">
+                                <td>
+                                    {{dataItem.ClientId}}
+                                </td>
+                                <td>
+                                    {{dataItem.StateName !== null ? dataItem.StateName : "Не определен"}}
+                                </td>
+                                <td>
+                                    {{dataItem.VIP}}
+                                </td>
+                                <td>
+                                    {{kendo.toString(kendo.parseDate(dataItem.Period), "MMMM yyyy")}}
+                                </td>
+                                <td>
+                                    {{dataItem.InP22Value | numberRu}}
+                                </td>
+                                <td>
+                                    {{dataItem.InP11Value | numberRu}}
+                                </td>
+                                <td>
+                                    {{dataItem.InP12Value | numberRu}}
+                                </td>
+                                <td class="text-center width150px">
+                                    <button class='btn btn-success btn-sm'
+                                            ng-click="openEditDialog(dataItem)"
+                                            title="Редактировать">
+                                        <span class='glyphicon glyphicon-pencil'></span>
+                                    </button>
+                                    <button class='btn btn-success btn-sm'
+                                            ng-click="openLogItemDialog(dataItem)"
+                                            title="История">
+                                        <span class='glyphicon glyphicon-align-justify'></span>
+                                    </button>
+                                    <button class='btn btn-success btn-sm'
+                                            ng-click="inzero(dataItem)"
+                                            title="В ноль">
+                                        <span class='glyphicon glyphicon-off'></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </script>
+                        <div ng-include="'views/TransactionPlan/HistoryOfChangePlans.html'"></div>
+                    </div>
+                </div>
+            </div>
+</div>
